@@ -1,30 +1,33 @@
-const http = require ("http");
-// const fs = require ("fs");
+//asynchronous
 
-// function onRequest(request, response) {
-//     response.writeHead(200, {"Content-Type": "text/html"})
-//     fs.readFile("./index.html", null, (error,data) => {
-//         if(error) {
-//             response.writeHead(404);
-//             response.write("file not found")
-//         }
-//         else{
-//             response.write(data)
-//         }
-//         response.end()
-//     })
-// }
+function onRequest(request, response) {
 
-// http.createServer(onRequest).listen(8000);
-
-function onRequest (request, response){
-    response.writeHead(200, {"Content-Type": "application/json"})
-    const data = {
-        name: "Yudi Krisnandi",
-        age: 22
+    function callback(error,data){
+        if(error) {
+            response.writeHead(404);
+            response.write("file not found")
+        }
+        else {
+            response.writeHead(200, {"Content-Type": "application/json"});
+            response.write(data)
+        }
+        response.end()
     }
-
-    response.end (JSON.stringify(data))
+    fs.readFile("./data.json", null, callback)
 }
 
-http.createServer(onRequest).listen(8000)
+http.createServer(onRequest).listen(8000,function(){console.log("server nyala")})
+
+//sychronous
+
+const http = require('http');
+const fs = require('fs')
+
+ function onRequest(request, response) {
+     const dataJson = fs.readFileSync("./data.json" , "utf-8")
+     response.writeHead(200, {"Content-Type": "application/json"})
+     response.write(dataJson)
+     response.end();
+ }
+
+ http.createServer(onRequest).listen(3000, function(){console.log("server nyala")})
